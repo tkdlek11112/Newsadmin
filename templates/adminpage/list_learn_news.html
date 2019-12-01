@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <meta charset="UTF-8">
+    {% include "resource_list.html" %}
+</head>
+<body>
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+{% include "adminpage/menu.html" %}
+<div class="content_wrap">
+    <form action="/list_learn_news/" method="get" class="form-inline">
+        <fieldset>
+        <div class="form-group">
+            <label for="search_type">카테고리</label>
+            <select id="search_type" name="search_type" class="form-control">
+                <option value="1" {% if type == '1' %} selected {% endif %} >질문</option>
+                <option value="2" {% if type == '2' %} selected {% endif %} >내용</option>
+                <option value="3" {% if type == '3' %} selected {% endif %} >질문+내용</option>
+                <option value="4" {% if type == '4' %} selected {% endif %} >태그</option>
+                <option value="5" {% if type == '5' %} selected {% endif %} >타입</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="search_keyword">검색어</label>
+            <input type="text" id="search_keyword" name="search_keyword" value="{{ keyword }}" class="form-control"/>
+        </div>
+        <button type="submit" class="btn btn-dark">검색</button>
+    </fieldset>
+    </form>
+    <button id="button_3" class="create-news btn btn-warning" type="button">질문답변 새로만들기</button>
+    <table class="table">
+        <colgroup>
+            <col width="5%">
+            <col width="15%">
+            <col width="15%">
+            <col width="55%">
+            <col width="10%">
+            <col>
+        </colgroup>
+        <thead class="thead-dark">
+         <tr>
+            <th class="tg-21xh">번호</th>
+            <th class="tg-21xh">날짜</th>
+            <th class="tg-21xh">시간</th>
+            <th class="tg-21xh">제목</th>
+            <th class="tg-21xh">광고여부</th>
+        </tr>
+        </thead>
+        <tbody class="tbody-border">
+         {%  for news in newses %}
+        <tr>
+            <td>{{ news.pk }}</td>
+            <td>{{ news.date }}</td>
+            <td>{{ news.time }}</td>
+            <td>{{ news.title }}</td>
+            <td>
+                <button type="button" onclick="button_click({{ news.pk }})" id="update_btn" {% if news.target == 1 %} class="btn btn-danger btn-sm" {% else %}  class="btn btn-primary btn-sm" {% endif %} data-id="{{ news.pk }}">{% if news.target == 1 %} 스팸 {% else %} 일반 {% endif %} </button>
+            </td>
+{#            <td>#}
+{#                <button type = "button" id="button_1" class="update-news btn btn-primary btn-sm" data-id="{% url 'update_learn_news' news.pk %}">수정</button>#}
+{#                <button id="button_2" class="delete-news btn btn-sm btn-danger" data-id="{% url 'delete_learn_news' news.pk %}">삭제</button>#}
+{#                </td>#}
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="pagination">
+        <span class="step-links">
+            {% if faqs.has_previous %}
+                <a href="?page=1&search_type={{ type }}&search_keyword={{ keyword }}">&laquo; first</a>
+                <a href="?page={{ newses.previous_page_number }}&search_type={{ type }}&search_keyword={{ keyword }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ newses.number }} of {{ newses.paginator.num_pages }}.
+            </span>
+
+            {% if faqs.has_next %}
+                <a href="?page={{ newses.next_page_number }}&search_type={{ type }}&search_keyword={{ keyword }}">next</a>
+                <a href="?page={{ newses.paginator.num_pages }}&search_type={{ type }}&search_keyword={{ keyword }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    function button_click(id) {
+        console.log("버튼 눌렀다" + id);
+        $.ajax({
+                url: '/list_learn_news',
+                success: function (resp) {
+                    console.log("석세스 탓다");
+                }
+            });
+    }
+
+        $('#update_btn').click( function () {
+            console.log("버튼 눌렀다");
+            var $id = $(this).data('id');
+
+        });
+
+
+
+{#    $(function() {#}
+{#        $(".create-news").modalForm({formURL: "{% url 'create_learn_news' %}"})#}
+{#        $(".update-news").each(function () {#}
+{#            $(this).modalForm({formURL: $(this).data('id')});#}
+{#        });#}
+{#        $(".delete-news").each(function () {#}
+{#            $(this).modalForm({formURL: $(this).data('id')});#}
+{#        });#}
+{#    });#}
+</script>
+
+</html>

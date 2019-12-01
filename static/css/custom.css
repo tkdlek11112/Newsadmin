@@ -1,0 +1,51 @@
+/* This css file is for defining customized style. */
+
+/* overwrite bootstrap's classes */
+.form-inline {padding: 10px 15px;margin-bottom: 20px;border: 1px solid #dadada;background: #f3f3f3;}
+.form-inline .form-group {display: inline-block;margin-right: 10px;}
+.form-inline label {display: inline;}
+
+/* gnb style */
+.menu_wrap {width: 100%; margin-bottom: 30px; box-shadow: 0 2px 4px #d6d6d6;border-bottom: 1px solid #cacaca;background: #fff;}
+.menu_wrap > ul {list-style: none;width: 80%;margin: 0 auto;padding: 0;}
+.menu_wrap > ul > li {display: inline-block;}
+.menu_wrap > ul > li > a {padding: 15px; font-size:16px; color: #5a5a5a; display: inline-block;}
+.menu_wrap > ul > li > a:hover {text-decoration: none;}
+.menu_wrap > ul > li > a.active {font-weight: bold;color: #000;}
+
+/* contents style */
+.content_wrap {width: 80%; margin: 0 auto;font-size:14px;padding-bottom: 50px;}
+.content_wrap input, .content_wrap  button, .content_wrap select {font-size:14px;}
+.pagination  {text-align: center; width: 100%;}
+.create-faq {float: right;margin-bottom:10px;}
+.table .thead-dark th {color: #fff;background-color: #343a40;padding: 14px 0;text-align: center;}
+.table .tbody-border {border: 1px solid #ddd;}
+.tbody-wrap {overflow-y: scroll; height: 200px;}
+.table tfoot {border: 1px solid #dee2e6;background:#f8f8f8;}
+.log_table_wrap {width: 20%; float: left;}
+.log_chart_wrap {width: 75%; float: right;}
+.mb0 {margin-bottom: 0 !important;}
+.mb15 {margin-bottom: 15px;}
+.tar {text-align: right;}
+.tac {text-align: center;}
+.fr {float: right;}
+
+.chat_btn {background: url('/static/img/chat_btn.png') no-repeat 0 0/60px 60px;height: 60px;border: none;width: 60px;position: fixed;bottom: 30px;right: 30px;padding: 0;}
+.chat_btn > span {position: absolute;left: -9999px;}
+.chat_wrap {display:none;width: 350px;height: 500px;position: fixed;bottom: 30px;right: 95px;background: #a9bdce;}
+.chat_content {height: 430px;overflow-y:scroll;padding:10px 15px;}
+.chat_input {width:100%;padding:2px 5px;}
+.chat_header {padding: 10px 15px;border-bottom: 1px solid #95a6b4;}
+.chat_header .close_btn {border: none;background: none;float: right;}
+.send_btn {position: absolute;bottom: 0;right: 0;border: 1px solid #666;background: #ffeb33;height: 28px;color: #0a0a0a;}
+.msg_box:after {content: '';display: block;clear:both;}
+.msg_box > span {padding: 3px 5px;word-break: break-all;display: block;max-width: 180px;margin-bottom: 10px;}
+.msg_box.send > span {background:#ffeb33;float: right;}
+.msg_box.receive > span {background:#fff;float: left;}
+
+.check-icon {color: #00bc00;font-weight: bold;margin-right: 5px;}
+.version-table-wrap {height: 380px; overflow-y: scroll;border: 1px solid #ddd;}
+.version-table-wrap .tbody-border {border: none;}
+.bullet-list {list-style:none;padding:0;margin:0;}
+.bullet-list > li {background: url('/static/img/bullet.png') no-repeat 0 center; padding-left: 8px;}
+.info-wrap {background-color: #d9edf7; padding: 10px 20px;margin-top: 15px;}

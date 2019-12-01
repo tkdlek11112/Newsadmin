@@ -15,7 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import url, include
+import Adminpage.views as view
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'^list_learn_news/', view.list_learn_news, name='list_learn_news'),
 ]

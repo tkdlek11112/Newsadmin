@@ -15,7 +15,7 @@
     </div>
 {% include "adminpage/menu.html" %}
 <div class="content_wrap">
-    <form action="/list_learn_news/" method="get" class="form-inline">
+    <form action="/list_real_news/" method="get" class="form-inline">
         <fieldset>
         <div class="form-group">
             <label for="search_type">카테고리</label>
@@ -34,7 +34,7 @@
         <button type="submit" class="btn btn-dark">검색</button>
     </fieldset>
     </form>
-    <button id="button_3" class="create-news btn btn-warning" type="button">질문답변 새로만들기</button>
+    <button id="button_3" class="create-news btn btn-warning" onclick="push_button();" type="button">학습으로 넘기기</button>
     <table class="table">
         <colgroup>
             <col width="5%">
@@ -70,10 +70,6 @@
                     {% endif %}
                 </button>
             </td>
-{#            <td>#}
-{#                <button type = "button" id="button_1" class="update-news btn btn-primary btn-sm" data-id="{% url 'update_learn_news' news.pk %}">수정</button>#}
-{#                <button id="button_2" class="delete-news btn btn-sm btn-danger" data-id="{% url 'delete_learn_news' news.pk %}">삭제</button>#}
-{#                </td>#}
         </tr>
         {% endfor %}
         </tbody>
@@ -101,13 +97,15 @@
     function button_click(id, target) {
         console.log("버튼 눌렀다" + id);
         var nowLocation = window.location.href;
+
         var data = {
                     'pk': id,
                     'target': target,
-                }
+                };
+
         $.ajax({
                 type: 'POST',
-                url: '/toggle_learn_news/',
+                url: '/toggle_real_news/',
                 data: data,
                 success: function (resp) {
                     console.log("석세스 탓다");
@@ -116,8 +114,17 @@
             });
     }
 
+    function push_button() {
+        var nowLocation = window.location.href;
 
-
+        $.ajax({
+            type: 'POST',
+            url: '/push_real2learn/',
+            success: function (resp){
+                location.href = nowLocation;
+            }
+        })
+    }
 </script>
 
 </html>

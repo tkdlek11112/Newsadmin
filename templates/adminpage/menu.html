@@ -1,7 +1,7 @@
 <div class="menu_wrap">
     <ul>
         <li><a href="{% url 'list_learn_news' %}" id="menu1">학습 뉴스 데이터</a></li>
-{#        <li><a href="{% url 'list_logs' %}" id="menu2">LOG 데이터</a></li>#}
+        <li><a href="{% url 'list_real_news' %}" id="menu2">운영 뉴스 데이터</a></li>
 {#        <li><a href="{% url 'statistics_logs' %}" id="menu3">통계 데이터</a></li>#}
 {#        <li><a href="{% url 'list_update_logs' %}" id="menu4">FAQ 수정이력</a></li>#}
 {#        <li><a href="{% url 'learn_faqs' %}" id="menu5">학습시키기</a></li>#}
@@ -14,10 +14,10 @@
         var currentUrl = location.href;
         if(currentUrl.indexOf('list_learn_news') > -1){
             $('#menu1').addClass('active');
+        } else if (currentUrl.indexOf('list_real_news') > -1){
+            $('#menu2').addClass('active');
         }
-{#        else if (currentUrl.indexOf('list_logs') > -1){#}
-{#            $('#menu2').addClass('active');#}
-{#        } else if (currentUrl.indexOf('statistics_logs') > -1){#}
+        {#else if (currentUrl.indexOf('statistics_logs') > -1){#}
 {#            $('#menu3').addClass('active');#}
 {#        } else if (currentUrl.indexOf('list_update_logs') > -1){#}
 {#            $('#menu4').addClass('active');#}

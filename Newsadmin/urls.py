@@ -21,9 +21,11 @@ import Adminpage.views as view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', view.list_learn_news),
     url(r'^list_learn_news/', view.list_learn_news, name='list_learn_news'),
     url(r'^toggle_learn_news/', view.toggle_learn_news, name='toggle_learn_news'),
     url(r'^list_real_news/', view.list_real_news, name='list_real_news'),
     url(r'^toggle_real_news/', view.toggle_real_news, name='toggle_real_news'),
     url(r'^push_real2learn/', view.push_real2learn, name='push_real2learn'),
+    url(r'^statistics_news/', view.statisticsnews, name='statistics_news'),
 ]

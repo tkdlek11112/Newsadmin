@@ -1,9 +1,13 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from .models import LearnNews, RealNews
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Q
+from django.db.models.functions import TruncMonth, TruncDate
+import simplejson as json
+from django.db.models import Q, DateTimeField, DateField, Count
+
+
 # Create your views here.
 
 
@@ -94,3 +98,84 @@ def push_real2learn(request):
     real_models.delete()
 
     return HttpResponse(status=200)
+
+
+def statisticsnews(request):
+
+    # 로그인 인증
+    # if not request.user.is_authenticated:
+    #     return HttpResponseRedirect('/')
+
+    stat_type = request.GET.get('stat_type')
+    stat_gbn = request.GET.get('optionRadios')
+    to_date = request.GET.get('to_date')
+    from_date = request.GET.get('from_date')
+    total_count = 0
+    cnt = 0
+    if stat_type == 'M':
+        if stat_gbn == 'period':
+            stats = LearnNews.objects \
+                .filter(date__range=[from_date, to_date]) \
+                .annotate(stat_date=TruncMonth('ldate')) \
+                .order_by('-stat_date') \
+                .values('stat_date') \
+                .annotate(stat_count=Count('title')
+                          ).values('stat_date', 'stat_count')
+        else:
+            stats = LearnNews.objects \
+                .annotate(stat_date=TruncMonth('date')) \
+                .order_by('-stat_date') \
+                .values('stat_date') \
+                .annotate(stat_count=Count('title')
+                          ).values('stat_date', 'stat_count')
+    else:
+        if stat_gbn == 'period':
+            stats = LearnNews.objects \
+                .filter(date__range=[from_date, to_date])\
+                .annotate(stat_date=TruncDate('date')) \
+                .order_by('-stat_date') \
+                .values('stat_date') \
+                .annotate(stat_count=Count('title')
+                          ).values('stat_date', 'stat_count')
+        else:
+            stats = LearnNews.objects \
+                .annotate(stat_date=TruncDate('date')) \
+                .order_by('-stat_date')\
+                .values('stat_date') \
+                .annotate(stat_count=Count('title')
+                          ).values('stat_date', 'stat_count')
+
+    date_list = [];
+    date_count = [];
+    for stat in stats:
+        date_list.append(str(stat['stat_date']))
+        date_count.append(str(stat['stat_count']))
+        total_count = total_count + int(stat['stat_count'])
+        cnt = cnt + 1
+
+    if cnt > 0:
+        total_mean = round(total_count / cnt)
+    else:
+        total_mean = 0
+    date_list.reverse()
+    date_count.reverse()
+
+    # 전체 뉴스 조회
+    LearnNews_spams = LearnNews.objects.filter(target=1)
+    LearnNews_normals = LearnNews.objects.filter(target=0)
+
+
+
+    context = {'stats': stats,
+               'stat_type': stat_type,
+               'optionRadios': stat_gbn,
+               'to_date': to_date,
+               'from_date': from_date,
+               'date_list': json.dumps(date_list),
+               'date_count': json.dumps(date_count),
+               'total_count': total_count,
+               'total_mean': total_mean,
+               'ln_total_spams': len(LearnNews_spams),
+               'ln_total_normals': len(LearnNews_normals)
+               }
+    return render(request, 'adminpage/statistics_news.html', context)

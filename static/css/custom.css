@@ -24,6 +24,8 @@
 .table tfoot {border: 1px solid #dee2e6;background:#f8f8f8;}
 .log_table_wrap {width: 20%; float: left;}
 .log_chart_wrap {width: 75%; float: right;}
+.log_chart_right {margin-top:1%; margin-left: 2%; margin-right: 5%; padding-top: 3%; width: 43%; float: right; border: 1px ridge #000000; background-color: rgba(255,255,255,.5); box-shadow: 1px 1px 1px rgba(0, 0, 0, .5);}
+.log_chart_left {margin-top:1%; margin-left: 5%; margin-right: 2%;padding-top: 3%; width: 43%; float: left; border: 1px ridge #000000; background-color: rgba(255,255,255,.5); box-shadow: 1px 1px 1px rgba(0, 0, 0, .5);}
 .mb0 {margin-bottom: 0 !important;}
 .mb15 {margin-bottom: 15px;}
 .tar {text-align: right;}

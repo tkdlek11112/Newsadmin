@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Title</title>
+     {% include "resource_list.html" %}
+    <link href="/static/css/styles.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+{% include "adminpage/menu.html" %}
+<div class="content_wrap">
+<form action="/statistics_news/" method="get" class="form-inline">
+    <fieldset >
+        <select id="stat_type" name="stat_type" class="form-control" >
+            <option value="D" {% if stat_type != 'M' %} selected {% endif %}> 일별 </option>
+            <option value="M" {% if stat_type == 'M' %} selected {% endif %}> 월별 </option>
+        </select>
+        <div class="radio" style="display: inline-flex;">
+            <label> <input type="radio" name="optionRadios" id="optionsRadios1" value="total"
+                           {% if optionRadios != 'period' %} checked {% endif %}/> 전체 </label>
+        </div>
+        <div class="radio" style="display: inline-flex;">
+            <label> <input type="radio" name="optionRadios" id="optionsRadios2" value="period"
+            {% if optionRadios == 'period' %} checked {% endif %}/> 기간 : </label>
+            <input id="fromDate" data-provide="datepicker" data-date-format="yyyy-mm-dd" class="form-control" name="from_date" value = {{ from_date }}>
+            <label> ~ </label>
+            <input id="toDate" data-provide="datepicker" data-date-format="yyyy-mm-dd" class="form-control" name="to_date" value = {{ to_date }}>
+        </div>
+        <button type="submit" class="btn btn-secondary">조회</button>
+
+    </fieldset>
+</form>
+<div>
+     <div class="log_table_wrap">
+         <table class="table mb0">
+             <thead class="thead-dark">
+             <tr>
+                 <th class="tg-21xh"> 기준</th>
+                 <th class="tg-21xh"> 카운트</th>
+             </tr>
+             </thead>
+         </table>
+         <div class="tbody-wrap">
+             <table class="table mb0">
+                 <tbody class="tbody-border">
+                 {% for stat in stats %}
+                 <tr>
+                     <td>{{ stat.stat_date }}</td>
+                     <td align="center">{{ stat.stat_count }}</td>
+                 </tr>
+                 {% endfor %}
+                 </tbody>
+             </table>
+         </div>
+         <table class="table">
+             <tfoot>
+             <tr>
+                 <th>합계</th>
+                 <td class="tar">{{ total_count }}</td>
+             </tr>
+             <tr>
+                 <th>평균</th>
+                 <td class="tar">{{ total_mean }}</td>
+             </tr>
+             </tfoot>
+         </table>
+     </div>
+    <div id="chart" class="log_chart_wrap"></div>
+
+</div>
+
+</div>
+<div  class="content_wrap">
+    <div  id="chart2" class="log_chart_left" style="height: 400px"></div>
+    <div  id="chart3" class="log_chart_right" style="height: 400px"></div>
+</div>
+</body>
+<script src="/static/apexchars.js"></script>
+<script>
+        // datepicker 초기화
+        $(function(){
+            $('#fromDate').datepicker({
+            });
+            $('#toDate').datepicker({
+                maxDate: "+1D"
+            });
+        });
+        $('input[type=radio][name=optionRadios]').on('click',function () {
+            var chkValue = $('input[type=radio][name=optionRadios]:checked').val();
+            if(chkValue == 'total'){
+                $('#fromDate').attr('disabled', 'disabled').val('');
+                $('#toDate').attr('disabled', 'disabled').val('');
+            }
+            else
+            {
+                $('#fromDate').removeAttr('disabled');
+                $('#toDate').removeAttr('disabled');
+            }
+        });
+        // 차트 렌더링
+
+        var aa = "{{ date_list }}"
+        var options = {
+            chart: {
+                height: 350,
+                type: 'bar',
+            },
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        position: 'top', // top, center, bottom
+                    },
+                }
+            },
+            dataLabels: {
+                enabled: true,
+                formatter: function (val) {
+                    return val ;
+                },
+                offsetY: -32,
+                style: {
+                    fontSize: '22px',
+                    colors: ["#304758"]
+                }
+            },
+            series: [{
+                name: 'Chat',
+                data: {{ date_count | safe  }}
+            }],
+            xaxis: {
+                categories: {{ date_list | safe }},
+                position: 'bottom',
+                labels: {
+                    offsetY: -4,
+                },
+                axisBorder: {
+                    show: false
+                },
+                axisTicks: {
+                    show: false
+                },
+                crosshairs: {
+                    fill: {
+                        type: 'gradient',
+                        gradient: {
+                            colorFrom: '#D8E3F0',
+                            colorTo: '#BED1E6',
+                            stops: [0, 100],
+                            opacityFrom: 0.4,
+                            opacityTo: 0.5,
+                        }
+                    }
+                },
+                tooltip: {
+                    enabled: true,
+                    offsetY: -35,
+                }
+            },
+            fill: {
+                gradient: {
+                    shade: 'light',
+                    type: "horizontal",
+                    shadeIntensity: 0.25,
+                    gradientToColors: undefined,
+                    inverseColors: true,
+                    opacityFrom: 1,
+                    opacityTo: 1,
+                    stops: [50, 0, 100, 100]
+                },
+            },
+            yaxis: {
+                axisBorder: {
+                    show: true
+                },
+                axisTicks: {
+                    show: false,
+                },
+                labels: {
+                    show: false,
+                    formatter: function (val) {
+                        return val ;
+                    }
+                }
+            },
+            title: {
+                text: '뉴스 데이터',
+                floating: true,
+                offsetY: 330,
+                align: 'center',
+                style: {
+                    color: '#444'
+                }
+            },
+        }
+        var chart = new ApexCharts(
+            document.querySelector("#chart"),
+            options
+        );
+        chart.render();
+
+
+        var options2 = {
+            chart: {
+                type: 'donut',
+            },
+            labels: ["광고", "일반"],
+            series: [{{ ln_total_spams }}, {{ ln_total_normals }}],
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 100
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }],
+            title: {
+                text: '학습 데이터',
+                floating: true,
+                offsetY: 240,
+                offsetX: -30,
+                align: 'center',
+                style: {
+                    fontSize: '42px',
+                    color: '#444'
+                }
+            },
+        }
+
+       var chart2 = new ApexCharts(
+            document.querySelector("#chart2"),
+            options2
+        );
+        chart2.render();
+
+
+         var options3 = {
+            chart: {
+                type: 'donut',
+            },
+            labels: ["광고", "일반"],
+            series: [{{ ln_total_spams }}, {{ ln_total_normals }}],
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 100
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }],
+              title: {
+                text: '운영 데이터',
+                floating: true,
+                offsetY: 240,
+                offsetX: -30,
+                align: 'center',
+                style: {
+                    fontSize: '42px',
+                    color: '#444'
+                }
+            },
+        }
+
+       var chart3 = new ApexCharts(
+            document.querySelector("#chart3"),
+            options3
+        );
+        chart3.render();
+    </script>
+</html>

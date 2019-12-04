@@ -3,10 +3,7 @@
         <li><a href="{% url 'list_learn_news' %}" id="menu1">학습 뉴스 데이터</a></li>
         <li><a href="{% url 'list_real_news' %}" id="menu2">운영 뉴스 데이터</a></li>
         <li><a href="{% url 'statistics_news' %}" id="menu3">통계 데이터</a></li>
-{#        <li><a href="{% url 'list_update_logs' %}" id="menu4">FAQ 수정이력</a></li>#}
-{#        <li><a href="{% url 'learn_faqs' %}" id="menu5">학습시키기</a></li>#}
-{#        <li><a href="{% url 'list_users' %}" id="menu6">사용자 관리</a></li>#}
-{#        <li><a href="{% url 'list_evts' %}" id="menu7">이벤트 관리</a></li>#}
+        <li><a href="{% url 'learn_news' %}" id="menu4">학습 관리</a></li>
     </ul>
 </div>
 <script>
@@ -16,18 +13,10 @@
             $('#menu1').addClass('active');
         } else if (currentUrl.indexOf('list_real_news') > -1){
             $('#menu2').addClass('active');
-        }
-        else if (currentUrl.indexOf('statistics_news') > -1) {
+        }else if (currentUrl.indexOf('statistics_news') > -1) {
             $('#menu3').addClass('active');
+        }else if (currentUrl.indexOf('learn_news') > -1) {
+        $('#menu4').addClass('active');
         }
-{#        } else if (currentUrl.indexOf('list_update_logs') > -1){#}
-{#            $('#menu4').addClass('active');#}
-{#        } else if (currentUrl.indexOf('learn_faqs') > -1){#}
-{#            $('#menu5').addClass('active');#}
-{#        } else if (currentUrl.indexOf('list_users') > -1){#}
-{#            $('#menu6').addClass('active');#}
-{#        } else if (currentUrl.indexOf('list_evts') > -1){#}
-{#            $('#menu7').addClass('active');#}
-{#        }#}
     })();
 </script>

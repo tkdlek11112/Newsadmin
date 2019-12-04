@@ -10,7 +10,7 @@ from django.db.models import Q, DateTimeField, DateField, Count
 
 # Create your views here.
 
-
+@csrf_exempt
 def list_learn_news(request):
     search_type = request.GET.get('search_type')
     search_keyword = request.GET.get('search_keyword')
@@ -48,7 +48,7 @@ def toggle_learn_news(request):
 
     return HttpResponse(status=200)
 
-
+@csrf_exempt
 def list_real_news(request):
     search_type = request.GET.get('search_type')
     search_keyword = request.GET.get('search_keyword')
@@ -99,7 +99,7 @@ def push_real2learn(request):
 
     return HttpResponse(status=200)
 
-
+@csrf_exempt
 def statisticsnews(request):
 
     # 로그인 인증
@@ -163,6 +163,8 @@ def statisticsnews(request):
     # 전체 뉴스 조회
     LearnNews_spams = LearnNews.objects.filter(target=1)
     LearnNews_normals = LearnNews.objects.filter(target=0)
+    RealNews_spams = RealNews.objects.filter(target=1)
+    RealNews_normals = RealNews.objects.filter(target=0)
 
 
 
@@ -176,6 +178,8 @@ def statisticsnews(request):
                'total_count': total_count,
                'total_mean': total_mean,
                'ln_total_spams': len(LearnNews_spams),
-               'ln_total_normals': len(LearnNews_normals)
+               'ln_total_normals': len(LearnNews_normals),
+               'rl_total_spams': len(RealNews_spams),
+               'rl_total_normals': len(RealNews_normals),
                }
     return render(request, 'adminpage/statistics_news.html', context)

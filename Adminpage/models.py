@@ -21,10 +21,9 @@ class LearnNews(models.Model):
 
 
 class RealNewsManager(models.Manager):
-    def create_news(self, date, time, title, tokens, target):
-        real_news = self.create(date=date, time=time, title=title, tokens=tokens, target=target)
+    def create_news(self, title, tokens, target):
+        real_news = self.create(title=title, tokens=tokens, target=target)
         return real_news
-
 
 class RealNews(models.Model):
     date = models.DateField(default=now)
@@ -33,4 +32,39 @@ class RealNews(models.Model):
     tokens = models.TextField(default='')
     target = models.IntegerField(default=0)
 
-    objects = LearnNewsManager()
+    objects = RealNewsManager()
+
+
+class LearnLogManager(models.Manager):
+    def create_learnlog(self):
+        llog = self.create()
+        llog.save()
+        return llog.pk
+
+    def update_learnlog(self, pk):
+        llog = LearnLog.objects.get(pk=pk)
+        llog.learn_status = 'S'
+        llog.save()
+        return llog
+
+    def update_apply(self,pk):
+        llogs = LearnLog.objects.all()
+        llogs.update(apply_status='N')
+
+        llog = LearnLog.objects.get(pk=pk)
+        llog.apply_status = 'Y'
+        llog.apply_date = now()
+        llog.apply_time = now()
+        llog.save()
+        return llog
+
+
+
+class LearnLog(models.Model):
+    learn_date = models.DateField(default=now)
+    learn_time = models.TimeField(default=now)
+    learn_status = models.CharField(default='P', max_length=1)
+    apply_date = models.DateField(default=now)
+    apply_time = models.TimeField(default=now)
+    apply_status = models.CharField(default='N', max_length=1)
+    objects = LearnLogManager()

@@ -20,11 +20,8 @@
         <div class="form-group">
             <label for="search_type">카테고리</label>
             <select id="search_type" name="search_type" class="form-control">
-                <option value="1" {% if type == '1' %} selected {% endif %} >질문</option>
-                <option value="2" {% if type == '2' %} selected {% endif %} >내용</option>
-                <option value="3" {% if type == '3' %} selected {% endif %} >질문+내용</option>
-                <option value="4" {% if type == '4' %} selected {% endif %} >태그</option>
-                <option value="5" {% if type == '5' %} selected {% endif %} >타입</option>
+                <option value="1" {% if type == '1' %} selected {% endif %} >제목</option>
+                <option value="2" {% if type == '2' %} selected {% endif %} >광고여부</option>
             </select>
         </div>
         <div class="form-group">
@@ -34,7 +31,6 @@
         <button type="submit" class="btn btn-dark">검색</button>
     </fieldset>
     </form>
-    <button id="button_3" class="create-news btn btn-warning" type="button">질문답변 새로만들기</button>
     <table class="table">
         <colgroup>
             <col width="5%">

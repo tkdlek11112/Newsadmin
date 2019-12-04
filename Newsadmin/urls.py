@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
 import Adminpage.views as view
+import News.views as view2
 
 
 urlpatterns = [
@@ -28,4 +29,9 @@ urlpatterns = [
     url(r'^toggle_real_news/', view.toggle_real_news, name='toggle_real_news'),
     url(r'^push_real2learn/', view.push_real2learn, name='push_real2learn'),
     url(r'^statistics_news/', view.statisticsnews, name='statistics_news'),
+    url(r'^receive_news/', view2.receive_news, name='receive_news'),
+    url(r'^learn/', view2.learn, name='learn'),
+    url(r'^apply_version/', view2.apply_version, name='apply_version'),
+    url(r'^learn_news/', view2.learn_news, name='learn_news'),
+
 ]

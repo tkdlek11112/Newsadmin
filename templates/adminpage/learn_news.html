@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <meta charset="UTF-8">
+    {% include "resource_list.html" %}
+</head>
+<body>
+{% include "adminpage/menu.html" %}
+<div class="content_wrap">
+    <button id="button_1" class="btn btn-warning fr mb15" type="button"  {% if learning == 'P' %} disabled="true" {% endif %}>학습하기</button>
+    <table class="table mb0">
+        <colgroup>
+            <col width="20%">
+            <col width="35%">
+            <col width="45%">
+        </colgroup>
+        <thead class="thead-dark">
+        <tr>
+            <th>학습 파일 버전</th>
+            <th>학습 날짜</th>
+            <th>적용 여부</th>
+        </tr>
+        </thead>
+    </table>
+    <div class="version-table-wrap">
+        <table class="table">
+            <colgroup>
+                <col width="20%">
+                <col width="35%">
+                <col width="45%">
+            </colgroup>
+            <tbody class="tbody-border">
+            {% for llog in stats %}
+            <tr>
+                <td class="tac">{{ llog.pk }}</td>
+                <td class="tac">{{ llog.learn_date }}</td>
+                <td class="tac">
+                    {% if llog.pk == now_version.pk %}
+                    <span class="check-icon">V</span>적용됨
+                    {% else %}
+                        {% if learning == 'S' %}
+                        <a href="javascript:apply('{{ llog.pk }}');" class="btn btn-primary btn-sm">적용</a>
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="info-wrap">
+        <ul class="bullet-list">
+            <li>현재 적용된 버전: {{ now_version.pk }}</li>
+            <li>최근 적용 일자: {{ now_version.apply_date }} {{ now_version.apply_time }}</li>
+        </ul>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+function apply(ver){
+    $.ajax({
+        url: '{% url 'apply_version' %}',
+        type: 'POST',
+        data: { pk : ver},
+        success: function(){
+            location.reload();
+        }
+    });
+}
+    $(function() {
+        $("#button_1").click(function () {
+            $.ajax({
+                url: '{% url 'learn' %}',
+                success: function() {
+                }
+            });
+            location.reload();
+
+        });
+    });
+</script>
+
+</html>

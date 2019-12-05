@@ -1,0 +1,17 @@
+<button type="button" id="chat_btn" class="chat_btn" title="대화"><span>대화</span></button>
+<div id="chat_wrap" class="chat_wrap"></div>
+<script>
+    $('#chat_btn').on('click', function(){
+        var $chatWrap = $('#chat_wrap');
+        if($chatWrap.children().length == 0){
+            $.ajax({
+                url: '/web_news',
+                success: function(resp){
+                    $('#chat_wrap').html(resp).show();
+                }
+            });
+        } else {
+            $chatWrap.find('#close_chat_btn').click();
+        }
+    });
+</script>

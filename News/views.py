@@ -10,9 +10,9 @@ from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 
 
+#뉴스를 받으면 실행됨
 @csrf_exempt
 def receive_news(request):
-    # NewsService.get_tag(data="hi")
     data = json.loads(request.body)
     title = data['title']
     ns = NewsService()
@@ -60,3 +60,14 @@ def learn(request):
         now_version = ver
     context = {'stats': stats, 'now_version': now_version, 'learning' : learning}
     return render(request, 'adminpage/learn_news.html', context)
+
+@csrf_exempt
+def web_news(request):
+    if request.method == 'POST':
+        input1 = request.POST['input1']
+        print(input1)
+        ns = NewsService()
+        ns.classify_news(input1)
+        return HttpResponse(status=200)
+    else:
+        return render(request, 'adminpage/chat_web.html')

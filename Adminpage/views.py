@@ -19,14 +19,14 @@ def list_learn_news(request):
 
     if len(search_keyword) > 0:
         if search_type == '1':
-            news_list = LearnNews.objects.order_by('pk').filter(title__contains=search_keyword)
+            news_list = LearnNews.objects.order_by('-pk').filter(title__contains=search_keyword)
         elif search_type == '2':
-            news_list = LearnNews.objects.order_by('pk').filter(target__contains=search_keyword)
+            news_list = LearnNews.objects.order_by('-pk').filter(target__contains=search_keyword)
 
     else:
         search_type = '1'
         search_keyword = ''
-        news_list = LearnNews.objects.all().order_by('pk')
+        news_list = LearnNews.objects.all().order_by('-pk')
 
     paginator = Paginator(news_list, 20)  # "5" 한페이지에서 보여줄 갯수를 정한다.
     page = request.GET.get('page')
@@ -57,14 +57,14 @@ def list_real_news(request):
 
     if len(search_keyword) > 0:
         if search_type == '1':
-            news_list = RealNews.objects.order_by('pk').filter(title__contains=search_keyword)
+            news_list = RealNews.objects.order_by('-pk').filter(title__contains=search_keyword)
         elif search_type == '2':
-            news_list = RealNews.objects.order_by('pk').filter(target__contains=search_keyword)
+            news_list = RealNews.objects.order_by('-pk').filter(target__contains=search_keyword)
 
     else:
         search_type = '1'
         search_keyword = ''
-        news_list = RealNews.objects.all().order_by('pk')
+        news_list = RealNews.objects.all().order_by('-pk')
 
     paginator = Paginator(news_list, 20)  # "5" 한페이지에서 보여줄 갯수를 정한다.
     page = request.GET.get('page')
@@ -112,6 +112,8 @@ def statisticsnews(request):
     from_date = request.GET.get('from_date')
     total_count = 0
     cnt = 0
+    total_count2 = 0
+    cnt2 = 0
     if stat_type == 'M':
         if stat_gbn == 'period':
             stats = LearnNews.objects \
@@ -121,9 +123,26 @@ def statisticsnews(request):
                 .values('stat_date') \
                 .annotate(stat_count=Count('title')
                           ).values('stat_date', 'stat_count')
+
+            stats2 = LearnNews.objects \
+                .filter(date__range=[from_date, to_date]) \
+                .annotate(stat_date=TruncMonth('ldate')) \
+                .filter(target=1) \
+                .order_by('-stat_date') \
+                .values('stat_date') \
+                .annotate(stat_count=Count('title')
+                          ).values('stat_date', 'stat_count')
         else:
             stats = LearnNews.objects \
                 .annotate(stat_date=TruncMonth('date')) \
+                .order_by('-stat_date') \
+                .values('stat_date') \
+                .annotate(stat_count=Count('title')
+                          ).values('stat_date', 'stat_count')
+
+            stats2 = LearnNews.objects \
+                .annotate(stat_date=TruncMonth('date')) \
+                .filter(target=1)\
                 .order_by('-stat_date') \
                 .values('stat_date') \
                 .annotate(stat_count=Count('title')
@@ -137,6 +156,15 @@ def statisticsnews(request):
                 .values('stat_date') \
                 .annotate(stat_count=Count('title')
                           ).values('stat_date', 'stat_count')
+
+            stats2 = LearnNews.objects \
+                .filter(date__range=[from_date, to_date]) \
+                .annotate(stat_date=TruncDate('date')) \
+                .filter(target=1) \
+                .order_by('-stat_date') \
+                .values('stat_date') \
+                .annotate(stat_count=Count('title')
+                          ).values('stat_date', 'stat_count')
         else:
             stats = LearnNews.objects \
                 .annotate(stat_date=TruncDate('date')) \
@@ -144,9 +172,17 @@ def statisticsnews(request):
                 .values('stat_date') \
                 .annotate(stat_count=Count('title')
                           ).values('stat_date', 'stat_count')
+            stats2 = LearnNews.objects \
+                .annotate(stat_date=TruncDate('date')) \
+                .filter(target=1) \
+                .order_by('-stat_date') \
+                .values('stat_date') \
+                .annotate(stat_count=Count('title')
+                          ).values('stat_date', 'stat_count')
 
-    date_list = [];
-    date_count = [];
+    date_list = []
+    date_count = []
+
     for stat in stats:
         date_list.append(str(stat['stat_date']))
         date_count.append(str(stat['stat_count']))
@@ -159,6 +195,23 @@ def statisticsnews(request):
         total_mean = 0
     date_list.reverse()
     date_count.reverse()
+
+    date_list2 = []
+    date_count2 = []
+
+    for stat in stats2:
+        date_list2.append(str(stat['stat_date']))
+        date_count2.append(str(stat['stat_count']))
+        total_count2 = total_count2 + int(stat['stat_count'])
+        cnt2 = cnt2 + 1
+
+    if cnt2 > 0:
+        total_mean2 = round(total_count2 / cnt2)
+    else:
+        total_mean2 = 0
+    date_list2.reverse()
+    date_count2.reverse()
+
 
     # 전체 뉴스 조회
     LearnNews_spams = LearnNews.objects.filter(target=1)
@@ -177,6 +230,11 @@ def statisticsnews(request):
                'date_count': json.dumps(date_count),
                'total_count': total_count,
                'total_mean': total_mean,
+               'stats2': stats2,
+               'date_list2': json.dumps(date_list2),
+               'date_count2': json.dumps(date_count2),
+               'total_count2': total_count2,
+               'total_mean2': total_mean2,
                'ln_total_spams': len(LearnNews_spams),
                'ln_total_normals': len(LearnNews_normals),
                'rl_total_spams': len(RealNews_spams),

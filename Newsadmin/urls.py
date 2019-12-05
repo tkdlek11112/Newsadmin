@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^push_real2learn/', view.push_real2learn, name='push_real2learn'),
     url(r'^statistics_news/', view.statisticsnews, name='statistics_news'),
     url(r'^receive_news/', view2.receive_news, name='receive_news'),
+    url(r'^web_news/', view2.web_news, name='web_news'),
     url(r'^learn/', view2.learn, name='learn'),
     url(r'^apply_version/', view2.apply_version, name='apply_version'),
     url(r'^learn_news/', view2.learn_news, name='learn_news'),

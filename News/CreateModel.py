@@ -19,8 +19,10 @@ from gensim.models import doc2vec
 User_Dic = ['스탁론','투자금','점유율','추천','수혜주','중장기','언론사','매수','수익주','추천','수수료','대환',
             '싹슬이','중장기','바닥주','상한가','투자금','대박주','관심주','시초가','대장주','급등주','카카오톡',
             'VIP','카톡방','저평가','전재','재배포','제레미']
+
 StopWord = {'등', '및', '것', '이'}
 
+# 학습데이터 전체 태깅
 def tag_learn_data():
     learnnews_models = LearnNews.objects.filter(tokens='')
     okt = Twitter()
@@ -33,7 +35,7 @@ def tag_learn_data():
         model.tokens = tokens
         model.save()
 
-
+# 뉴스 태깅하기
 def tagging_title(title):
     okt = Twitter()
     okt.add_dictionary(User_Dic, 'Noun')
@@ -58,6 +60,7 @@ def load_stopword():
     for model in stopword_models:
         StopWord.add(model.word)
 
+# 학습하기
 def create_model(version):
     filepath = 'News/trainfiles/'
 

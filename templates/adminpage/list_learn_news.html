@@ -34,9 +34,10 @@
     <table class="table">
         <colgroup>
             <col width="5%">
-            <col width="15%">
-            <col width="15%">
-            <col width="55%">
+            <col width="8%">
+            <col width="7%">
+            <col width="40%">
+            <col width="30%">
             <col width="10%">
             <col>
         </colgroup>
@@ -46,6 +47,7 @@
             <th class="tg-21xh">날짜</th>
             <th class="tg-21xh">시간</th>
             <th class="tg-21xh">제목</th>
+            <th class="tg-21xh">토큰</th>
             <th class="tg-21xh">광고여부</th>
         </tr>
         </thead>
@@ -56,6 +58,7 @@
             <td>{{ news.date }}</td>
             <td>{{ news.time }}</td>
             <td>{{ news.title }}</td>
+            <td>{{ news.tokens }}</td>
             <td>
                 <button type="button" onclick="button_click({{ news.pk }}, {{ news.target }})" id="update_btn"
                         {% if news.target == 1 %} class="btn btn-danger btn-sm"

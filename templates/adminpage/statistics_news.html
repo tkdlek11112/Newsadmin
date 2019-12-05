@@ -78,6 +78,45 @@
 
 </div>
 
+<div>
+     <div class="log_table_wrap">
+         <table class="table mb0">
+             <thead class="thead-dark">
+             <tr>
+                 <th class="tg-21xh"> 기준</th>
+                 <th class="tg-21xh"> 카운트</th>
+             </tr>
+             </thead>
+         </table>
+         <div class="tbody-wrap">
+             <table class="table mb0">
+                 <tbody class="tbody-border">
+                 {% for stat in stats2 %}
+                 <tr>
+                     <td>{{ stat.stat_date }}</td>
+                     <td align="center">{{ stat.stat_count }}</td>
+                 </tr>
+                 {% endfor %}
+                 </tbody>
+             </table>
+         </div>
+         <table class="table">
+             <tfoot>
+             <tr>
+                 <th>합계</th>
+                 <td class="tar">{{ total_count2 }}</td>
+             </tr>
+             <tr>
+                 <th>평균</th>
+                 <td class="tar">{{ total_mean2 }}</td>
+             </tr>
+             </tfoot>
+         </table>
+     </div>
+    <div id="chart_spam" class="log_chart_wrap"></div>
+
+</div>
+
 </div>
 <div  class="content_wrap">
     <div  id="chart2" class="log_chart_left" style="height: 400px"></div>
@@ -108,11 +147,18 @@
         });
         // 차트 렌더링
 
-        var aa = "{{ date_list }}"
+     //   var aa = "{{ date_list }}"
         var options = {
             chart: {
                 height: 350,
                 type: 'bar',
+                stacked: true,
+                toolbar: {
+                    show:true
+                },
+                zoom: {
+                    enabled: true
+                }
             },
             plotOptions: {
                 bar: {
@@ -126,7 +172,7 @@
                 formatter: function (val) {
                     return val ;
                 },
-                offsetY: -32,
+                offsetY: -30,
                 style: {
                     fontSize: '22px',
                     colors: ["#304758"]
@@ -192,7 +238,7 @@
                 }
             },
             title: {
-                text: '뉴스 데이터',
+                text: '뉴스(전체) 데이터',
                 floating: true,
                 offsetY: 330,
                 align: 'center',
@@ -206,6 +252,117 @@
             options
         );
         chart.render();
+
+
+         var options_spam = {
+             colors: ['#DC3545'],
+            chart: {
+                height: 350,
+                type: 'bar',
+                stacked: true,
+                toolbar: {
+                    show:true
+                },
+                zoom: {
+                    enabled: true
+                }
+            },
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        position: 'top', // top, center, bottom
+                    },
+                }
+            },
+            dataLabels: {
+                enabled: true,
+                formatter: function (val) {
+                    return val ;
+                },
+                offsetY: -30,
+                style: {
+                    fontSize: '22px',
+                    colors: ["#304758"]
+                }
+            },
+            series: [{
+                name: 'Chat',
+                data: {{ date_count2 | safe  }},
+            }],
+            xaxis: {
+                categories: {{ date_list2 | safe }},
+                position: 'bottom',
+                labels: {
+                    offsetY: -4,
+                },
+                axisBorder: {
+                    show: false
+                },
+                axisTicks: {
+                    show: false
+                },
+                crosshairs: {
+                    fill: {
+                        type: 'gradient',
+
+                        gradient: {
+                            colorFrom: '#D8E3F0',
+                            colorTo: '#BED1E6',
+                            stops: [0, 100],
+                            opacityFrom: 0.4,
+                            opacityTo: 0.5,
+                        }
+                    }
+                },
+                tooltip: {
+                    enabled: true,
+                    offsetY: -35,
+                },
+                style: {
+                    color: '#dc3545'
+                }
+            },
+            fill: {
+                gradient: {
+                    shade: 'light',
+                    type: "horizontal",
+                    shadeIntensity: 0.25,
+                    gradientToColors: undefined,
+                    inverseColors: true,
+                    opacityFrom: 1,
+                    opacityTo: 1,
+                    stops: [50, 0, 100, 100]
+                },
+            },
+            yaxis: {
+                axisBorder: {
+                    show: true
+                },
+                axisTicks: {
+                    show: false,
+                },
+                labels: {
+                    show: false,
+                    formatter: function (val) {
+                        return val ;
+                    }
+                }
+            },
+            title: {
+                text: '뉴스(광고) 데이터',
+                floating: true,
+                offsetY: 330,
+                align: 'center',
+                style: {
+                    color: '#444'
+                }
+            },
+        }
+        var chart_spam = new ApexCharts(
+            document.querySelector("#chart_spam"),
+            options_spam
+        );
+        chart_spam.render();
 
 
         var options2 = {
@@ -228,7 +385,7 @@
             title: {
                 text: '학습 데이터',
                 floating: true,
-                offsetY: 240,
+                offsetY: 160,
                 offsetX: -30,
                 align: 'center',
                 style: {
@@ -265,7 +422,7 @@
               title: {
                 text: '운영 데이터',
                 floating: true,
-                offsetY: 240,
+                offsetY: 160,
                 offsetX: -30,
                 align: 'center',
                 style: {

@@ -7,8 +7,8 @@ from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 import pickle
 from News.models import UserDic, StopWord
-# from ckonlpy.tag import Twitter, Postprocessor
-from konlpy.tag import Twitter
+from ckonlpy.tag import Twitter, Postprocessor
+# from konlpy.tag import Kkma
 from gensim.models.doc2vec import TaggedDocument
 import multiprocessing
 import jpype
@@ -28,7 +28,8 @@ def tag_learn_data():
     learnnews_models = LearnNews.objects.filter(tokens='')
     okt = Twitter()
     okt.add_dictionary(User_Dic, 'Noun')
-    postprocessor = []
+    postprocessor = Postprocessor(okt, stopwords=StopWord)
+
     jpype.attachThreadToJVM()
 
     for model in learnnews_models:
@@ -40,8 +41,7 @@ def tag_learn_data():
 def tagging_title(title):
     okt = Twitter()
     okt.add_dictionary(User_Dic, 'Noun')
-    # postprocessor = Postprocessor(okt, stopwords=StopWord)
-    postprocessor = []
+    postprocessor = Postprocessor(okt, stopwords=StopWord)
     jpype.attachThreadToJVM()
     tokens = [word[0] for word in postprocessor.pos(title) if word[1] in ['Noun']]
     return tokens

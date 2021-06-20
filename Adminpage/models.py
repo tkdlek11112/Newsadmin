@@ -25,6 +25,7 @@ class RealNewsManager(models.Manager):
         real_news = self.create(title=title, tokens=tokens, target=target)
         return real_news
 
+
 class RealNews(models.Model):
     date = models.DateField(default=now)
     time = models.TimeField(default=now)
@@ -57,7 +58,6 @@ class LearnLogManager(models.Manager):
         llog.apply_time = now()
         llog.save()
         return llog
-
 
 
 class LearnLog(models.Model):

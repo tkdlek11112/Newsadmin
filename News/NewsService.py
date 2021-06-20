@@ -7,7 +7,7 @@ warnings.filterwarnings(action='ignore', category=UserWarning, module='gensim')
 from gensim.models import doc2vec
 import pickle
 
-# 모델 로딩
+# # 모델 로딩
 model_file = 'News/trainfiles/current/d2v_news.model'
 d2v_model = doc2vec.Doc2Vec.load(model_file)
 d2v_model.random = np.random.RandomState(0)

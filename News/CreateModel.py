@@ -65,7 +65,7 @@ def create_model(version):
     filepath = 'News/trainfiles/'
 
     learnnews_models = LearnNews.objects.all()
-
+    print(learnnews_models)
     news_sentence = []
     news_target = []
     news_index = []
@@ -81,6 +81,8 @@ def create_model(version):
     news_array = [[news_sentence[i], news_index[i], news_target[i]] for i in range(len(news_sentence))]
     tagged_news = [TaggedDocument(d, [c]) for d, c, t in news_array]
 
+    print(news_array, tagged_news)
+
     cores = multiprocessing.cpu_count()
     d2v_news = doc2vec.Doc2Vec(vector_size=300,
                                # alpha=0.025,
@@ -90,17 +92,19 @@ def create_model(version):
                                window=5,
                                dm=0,
                                dbow_words=1,
-                               min_count=5,
+                               min_count=0,
                                workers=cores,
                                seed=0,
                                epochs=20
                                )
     d2v_news.build_vocab(tagged_news)
+    print(d2v_news)
 
     d2v_news.train(tagged_news,
                    total_examples=d2v_news.corpus_count,
                    epochs=d2v_news.epochs
                    )
+    print("모델만들기")
 
     # save
     try:
@@ -112,6 +116,8 @@ def create_model(version):
     model_file = filepath + str(version) + '/d2v_news.model'
     d2v_news.save(model_file)
     d2v_news.wv.save_word2vec_format(model_file+'.word2vec_format')
+
+    print("모델 파일 저장")
 
     # 작업공간 정리
     d2v_news.delete_temporary_training_data(keep_doctags_vectors=True, keep_inference=True)

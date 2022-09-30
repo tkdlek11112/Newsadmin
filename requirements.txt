@@ -7,7 +7,7 @@ customized-konlpy==0.0.64
 Django==3.2.4
 gensim==3.8.3
 idna==2.10
-joblib==1.0.1
+joblib==1.2.0
 konlpy==0.5.2
 customized-konlpy
 lxml==4.6.3
